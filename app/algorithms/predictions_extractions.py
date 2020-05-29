@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.core.multiarray
 import cv2
-import utils
+import app.utils as utils
 
 
 def separate_objects_from_mask(mask):  # [ymin, ymax, xmin, xmax]

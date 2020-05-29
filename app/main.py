@@ -1,9 +1,9 @@
 from flask import Flask
-import asymmetric_eval as asymmetric
-import border_eval as border
-import size_eval as size
-import predictions_extractions as prediction
-import Mole
+from app.algorithms import asymmetric_eval as asymmetric
+from app.algorithms import border_eval as border
+from app.algorithms import size_eval as size
+from app.algorithms import predictions_extractions as prediction
+from app.classes import Mole
 from flask import jsonify, request
 
 import numpy as np
@@ -36,7 +36,7 @@ def analyze():
     #     coordinates = border.find_all_coordinates(separated_mask)
     #     moles.append(Mole(asymmetric, size, border, coordinates))
     #     print ("Success", file=sys.stderr)
-    return jsonify({'results' : dpi})
+    return jsonify({'results': dpi})
 
 if __name__ == "__main__":
     # Only for debugging while developing

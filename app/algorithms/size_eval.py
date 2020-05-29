@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.core.multiarray
 import cv2
-import utils
+import app.utils as utils
 
 ## TODO: need to improve this algorithm - take the distance parameter into account
 def distance(pixel1, pixel2):

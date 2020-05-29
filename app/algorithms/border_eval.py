@@ -1,8 +1,8 @@
 import numpy as np
 import numpy.core.multiarray
-import utils
+import app.utils as utils
 import cv2
-import Point
+from app.classes import Point
 
 def eval_border_irregularities(border_irregularities_number):
     return min((border_irregularities_number / 100)**1.5, 1.0)
