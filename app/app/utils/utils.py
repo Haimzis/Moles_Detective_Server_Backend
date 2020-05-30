@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 import numpy.core.multiarray
 import cv2
-import params
+from ..utils import params
 
 
 def find_object_coords(object_mask, coords=None):  # crop_coords = [ymin, ymax, xmin, xmax]
@@ -58,33 +58,6 @@ def extract_object_from_both_img_mask(data):
             print(cv2.error.msg)
             break
         print(object_img_path, ' object extracted')
-
-
-def read_data(images_dir=params.input_images_dir, masks_dir=params.input_masks_dir, labels_prefix=''):
-    data = []
-    img_names = []
-    for depth in range(0, params.max_depth):
-        for format in params.formats:
-            img_names += tf.gfile.Glob(os.path.join(images_dir + '/*' * depth, '*.{0}'.format(format)))
-    for img_name in img_names:
-        if img_name[0] == '.':
-            mask_name = '.' + img_name.replace(images_dir, masks_dir).split('.')[1] + labels_prefix + '.png'
-        else:
-            mask_name = img_name.replace(images_dir, masks_dir).split('.')[0] + labels_prefix + '.png'
-        data.append({'input': img_name, 'label': mask_name})
-    return data
-
-
-def generated_data_directories_init():
-    if not os.path.exists(params.output_dir):
-        os.mkdir(params.output_dir)
-        os.mkdir(params.output_img_data)
-        os.mkdir(params.output_mask_data)
-    else:
-        if not os.path.exists(params.output_img_data):
-            os.mkdir(params.output_img_data)
-        if not os.path.exists(params.output_mask_data):
-            os.mkdir(params.output_mask_data)
 
 
 def cut_roi_from_mask(mask, coords):  # crop_coords = [ymin, ymax, xmin, xmax]

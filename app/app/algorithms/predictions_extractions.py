@@ -1,15 +1,15 @@
 import numpy as np
 import numpy.core.multiarray
 import cv2
-import app.utils as utils
+from ..utils import utils
 
 
 def separate_objects_from_mask(mask):  # [ymin, ymax, xmin, xmax]
     coords = utils.find_object_coords(mask)
     separated_objects_coords_col = separate_object_anchor(mask, coords, separation_op='col')
     separated_objects_coords = []
-    for separated_objects_coords_col in separated_objects_coords_col:
-        row_separation_res = separate_object_anchor(mask, separated_objects_coords_col, separation_op='row')
+    for separated_object_coords_col in separated_objects_coords_col:
+        row_separation_res = separate_object_anchor(mask, separated_object_coords_col, separation_op='row')
         separated_objects_coords += row_separation_res
     separated_objects_masks = [utils.cut_roi_from_mask(mask, coords) for coords in separated_objects_coords]
     return separated_objects_masks

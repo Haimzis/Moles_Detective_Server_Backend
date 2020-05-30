@@ -1,8 +1,8 @@
-import app.utils as utils
+from ..utils import utils
 import numpy as np
 import numpy.core.multiarray
 import cv2
-
+import sys
 
 
 def eval_asymmetric(mask):
@@ -11,7 +11,7 @@ def eval_asymmetric(mask):
     :return: ratio between uncommon pixels and common pixels
              of the 2 parts that divided from the center both horizontal and vertical.
     """
-    aligned_mask = utils.align(seg_mask)
+    aligned_mask = utils.align(mask)
     bias = 0.35  # for nice appearance in the bar (too avoid small scores)
     width_center = aligned_mask.shape[1] // 2
     height_center = aligned_mask.shape[0] // 2
@@ -35,8 +35,8 @@ def eval_asymmetric(mask):
     result_horizontal = cv2.bitwise_xor(or_horizontal, and_horizontal)
     horizontal_score = np.sum(result_horizontal) / np.sum(or_horizontal)
     vertical_score = np.sum(result_vertical) / np.sum(or_vertical)
-    return min(1.0, (horizontal_score + vertical_score) / 2 + bias)
-
+    result = (horizontal_score + vertical_score) / 2.0 + bias
+    return min(1.0, result)
 
 if __name__ == '__main__':
     seg_mask = cv2.imread('/home/haimzis/PycharmProjects/DL_training_preprocessing/Output/objects_extraction/annotations/ISIC_0014190_segmentation.png',  -1)

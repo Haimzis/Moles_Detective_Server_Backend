@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.core.multiarray
 import cv2
-import app.utils as utils
+from ..utils import utils
 
 ## TODO: need to improve this algorithm - take the distance parameter into account
 def distance(pixel1, pixel2):
@@ -13,7 +13,7 @@ def calculate_max_diameter(mask):
     max_diameter = 0
     for i in range(0, aligned_mask.shape[0]):
         for j in range(0, aligned_mask.shape[0]):
-            if aligned_mask[i, 0] != 0 and aligned_mask[j, aligned_mask.shape[1] - 1] != 0:
+            if aligned_mask[i, 0].any() and aligned_mask[j, aligned_mask.shape[1] - 1].any():
                 diameter = distance([i, 0], [j, aligned_mask.shape[1] - 1])
                 if max_diameter < diameter:
                     max_diameter = diameter

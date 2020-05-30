@@ -1,8 +1,8 @@
 import numpy as np
 import numpy.core.multiarray
-import app.utils as utils
+from ..utils import utils
 import cv2
-from app.classes import Point
+from ..classes.Point import Point
 
 def eval_border_irregularities(border_irregularities_number):
     return min((border_irregularities_number / 100)**1.5, 1.0)
@@ -60,13 +60,13 @@ def find_all_coordinates(mask):
     aligned_mask = utils.align(mask)
     points = []
     y1, x1 = find_quarter_coords(aligned_mask, 1, -1)
-    points.append(y1,x1)
+    points.append(Point(y1,x1))
     y2, x2 = find_quarter_coords(aligned_mask, -1, -1)
-    points.append(y2,x2)
+    points.append(Point(y2,x2))
     y3, x3 = find_quarter_coords(aligned_mask, -1, 1)
-    points.append(y3,x3)
+    points.append(Point(y3,x3))
     y4, x4 = find_quarter_coords(aligned_mask, 1, 1)
-    points.append(y4,x4)
+    points.append(Point(y4,x4))
     return points
 
 def find_quarter_coords(aligned_mask, x_dir, y_dir):
