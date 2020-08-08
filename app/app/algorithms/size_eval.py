@@ -3,6 +3,7 @@ import numpy.core.multiarray
 import cv2
 from ..utils import utils
 
+
 ## TODO: need to improve this algorithm - take the distance parameter into account
 def distance(pixel1, pixel2):
     return ((pixel1[1] - pixel2[1]) ** 2 + (pixel1[0] - pixel2[0]) ** 2) ** 0.5

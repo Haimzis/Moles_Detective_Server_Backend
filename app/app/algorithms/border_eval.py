@@ -4,6 +4,7 @@ from ..utils import utils
 import cv2
 from ..classes.Point import Point
 
+
 def eval_border_irregularities(border_irregularities_number):
     return min((border_irregularities_number / 100)**1.5, 1.0)
 
