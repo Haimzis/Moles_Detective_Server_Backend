@@ -6,8 +6,8 @@ from .algorithms import predictions_extractions as prediction
 from .classes.Mole import Mole
 from .utils import upload_image as ui
 from flask import jsonify, request
-from app.app.utils import utils
-from app.app import pb_inference as inference
+from . import pb_inference as inference
+from .utils import log
 import numpy as np
 import numpy.core.multiarray
 import cv2
@@ -26,7 +26,7 @@ def analyze():
     path = ui.upload_file(request)
     dpi = request.args['dpi']
     # file = request.files['mask']
-    print (path, file=sys.stderr)
+    log.writeToLogs("Starting to check a new image: "+path)
     mask = inference.run_model(path)
     # separated_masks = prediction.separate_objects_from_mask(mask) TODO: in the future we will separate more than one mask
     separated_masks = utils.cut_roi_from_mask(mask, utils.find_object_coords(mask))
@@ -39,7 +39,7 @@ def analyze():
         asymtrc = asy.eval_asymmetric(separated_mask)
         crdint = border.find_all_coordinates(separated_mask)
         moles_analyze_results.append(Mole(asymtrc, sz, bdr, crdint))
-    print (moles_analyze_results[0].toJSON(), file=sys.stderr)
+    # print (moles_analyze_results[0].toJSON(), file=sys.stderr)
     return jsonify({'results': moles_analyze_results.toJSON()})
 
 if __name__ == "__main__":
