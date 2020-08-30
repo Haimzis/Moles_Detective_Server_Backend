@@ -27,7 +27,8 @@ def analyze():
     dpi = request.args['dpi']
     # file = request.files['mask']
     log.writeToLogs("Starting to check a new image: "+path)
-    mask = inference.run_model(path)
+    inference.init_inference()
+    mask = inference.quick_inference(path)
     # separated_masks = prediction.separate_objects_from_mask(mask) TODO: in the future we will separate more than one mask
     separated_masks = utils.cut_roi_from_mask(mask, utils.find_object_coords(mask))
     moles_analyze_results = []

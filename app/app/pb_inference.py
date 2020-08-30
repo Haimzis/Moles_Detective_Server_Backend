@@ -11,8 +11,8 @@ from matplotlib import gridspec
 from matplotlib import pyplot as plt
 import numpy as np
 from PIL import Image
-import tensorflow as tf
-from app.app.utils import params
+import tensorflow.compat.v1 as tf
+from .utils import params
 import cv2
 
 
@@ -147,7 +147,7 @@ def init_inference():
         'background', 'Mole'
     ])
 
-    MY_GRAPH_PATH = './Models/MobileNet_V3_large_ISIC_ver1.pb'
+    MY_GRAPH_PATH = '/app/files/Models/MobileNet_V3_large_ISIC_ver1.pb'
     FULL_LABEL_MAP = np.arange(len(LABEL_NAMES)).reshape(len(LABEL_NAMES), 1)
     FULL_COLOR_MAP = label_to_color_image(FULL_LABEL_MAP)
 
