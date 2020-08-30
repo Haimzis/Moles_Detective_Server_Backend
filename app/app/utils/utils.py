@@ -119,3 +119,25 @@ def align(mask):
             if alignment_res[j, i].any():
                 alignment_res[j, i] = 100
     return alignment_res
+
+
+def find_center_coords(mask_original_coords):  # crop_coords = [ymin, ymax, xmin, xmax]
+    ymin, ymax, xmin, xmax = mask_original_coords
+    center_coords = (ymax - ymin // 2, xmax - xmin // 2)
+    return center_coords
+
+
+def distance(coords1, coords2):
+    return ((coords1[0] - coords2[0])**2 + (coords1[1] - coords2[1])**2) ** 0.5
+
+
+def find_object_radius(mask_original_coords):
+    center = find_center_coords(mask_original_coords)
+    radius = max(distance(center, (mask_original_coords[0], mask_original_coords[0])),
+                 distance(center, (mask_original_coords[0], mask_original_coords[1])),
+                 distance(center, (mask_original_coords[1], mask_original_coords[0])),
+                 distance(center, (mask_original_coords[1], mask_original_coords[1])))
+    return radius
+   
+    
+
