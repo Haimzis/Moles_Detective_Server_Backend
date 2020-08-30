@@ -54,9 +54,9 @@ class DeepLabModel(object):
         target_size = (self.INPUT_SIZE, self.INPUT_SIZE)
         resized_image = image.convert('RGB').resize(target_size, Image.ANTIALIAS)
         net_image = resized_image
-        if params.HZ_preprocess_activate:
-            net_image = params.image_preprocess_func(resized_image)
-            net_image = np.expand_dims(net_image, axis=-1)
+        # if params.HZ_preprocess_activate:
+        #     net_image = params.image_preprocess_func(resized_image)
+        #     net_image = np.expand_dims(net_image, axis=-1)
         batch_seg_map = self.sess.run(
             self.OUTPUT_TENSOR_NAME,
             feed_dict={self.INPUT_TENSOR_NAME: [np.asarray(net_image)]})
