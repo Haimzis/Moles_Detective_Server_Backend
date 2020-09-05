@@ -4,4 +4,4 @@ color_elimination_const = 33
 HZ_preprocess = True
 
 ### MOBILE_NET_V3 ###
-INPUT_SIZE = 100
+INPUT_SIZE = 250
