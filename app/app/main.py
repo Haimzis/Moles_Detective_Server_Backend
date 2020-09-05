@@ -2,17 +2,12 @@ from flask import Flask
 from .algorithms import asymmetric_eval as asy
 from .algorithms import border_eval as border
 from .algorithms import size_eval as size
-from .algorithms import predictions_extractions as prediction
 from .classes.Mole import Mole
 from .utils import upload_image as ui
 from flask import jsonify, request
-from . import pb_inference as inference
+from app.app.model_inference import segmentation_inference as inference
 from .utils import log
-import numpy as np
-import numpy.core.multiarray
-import cv2
 import sys
-import jsonpickle
 
 app = Flask(__name__)
 
