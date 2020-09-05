@@ -34,42 +34,8 @@ def find_object_coords(object_mask, coords=None):  # crop_coords = [ymin, ymax, 
     return [min_y, max_y, min_x, max_x]
 
 
-def extract_object_from_both_img_mask(data):
-    for data_dict in data:
-        object_img_path = data_dict['input']
-        object_mask_path = data_dict['label']
-        object_img = cv2.imread(object_img_path, -1)
-        object_mask = cv2.imread(object_mask_path, -1)
-        if not object_mask.any():
-            continue
-        object_coords = find_object_coords(object_mask)
-        object_img_cropped = object_img[object_coords[0]:object_coords[1], object_coords[2]:object_coords[3], :]
-        object_mask_cropped = object_mask[object_coords[0]:object_coords[1], object_coords[2]:object_coords[3]]
-        output_img_path = params.output_img_extraction + '/' + object_img_path.split('/')[-1].split('.')[0] + '.png'
-        try:
-            final_output_img_cropped = cv2.bitwise_and(object_img_cropped, object_img_cropped, mask=object_mask_cropped)
-            cv2.imwrite(output_img_path, final_output_img_cropped)
-            cv2.imwrite(params.output_mask_extraction + '/' + object_mask_path.split('/')[-1], object_mask_cropped)
-
-        except cv2.error:
-            print('failed!')
-            print(object_img_path)
-            print(object_coords)
-            print(cv2.error.msg)
-            break
-        print(object_img_path, ' object extracted')
-
-
 def cut_roi_from_mask(mask, coords):  # crop_coords = [ymin, ymax, xmin, xmax]
     return mask[coords[0]: coords[1], coords[2]: coords[3]]
-
-
-if __name__ == '__main__':
-    # object_data = read_data(params.object_img_dir,
-    #                         params.object_mask_dir,
-    #                              '_segmentation')
-    # extract_object_from_both_img_mask(object_data)
-    pass
 
 
 def rotate(mask, angle):
