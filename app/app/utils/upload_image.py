@@ -1,6 +1,7 @@
 import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
+import time
 
 UPLOAD_FOLDER = '/files/masks'
 ALLOWED_EXTENSIONS = {'png'}
@@ -10,7 +11,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           getExtenstion(filename) in ALLOWED_EXTENSIONS
+
+def getExtenstion(filename):
+    return filename.rsplit('.', 1)[1].lower()
 
 def create_folder(path):
     try:
@@ -18,7 +22,7 @@ def create_folder(path):
     except OSError:
         print ("Creation of the directory %s failed" % path)
     else:
-        print ("Successfully created the directory %s " % path) 
+        print ("Successfully created the directory %s" % path) 
 
 def upload_file(request):
     if request.method == 'POST':
@@ -33,7 +37,7 @@ def upload_file(request):
             flash('No selected file')
             return
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            filename = secure_filename(int(round(time.time() * 1000)) + "_" + file.filename)
             create_folder(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return os.path.join(app.config['UPLOAD_FOLDER'], filename)
