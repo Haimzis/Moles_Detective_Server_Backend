@@ -1,1 +1,8 @@
+app/app/logs.txt
 .idea/
+app/__pycache__/
+app/app/__pycache__/
+app/app/algorithms/__pycache__/
+app/app/classes/__pycache__/
+app/app/model_inference/__pycache__/
+app/app/utils/__pycache__/

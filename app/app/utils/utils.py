@@ -1,11 +1,5 @@
-import os
-
-import numpy as np
-import tensorflow as tf
-import numpy.core.multiarray
 import cv2
-from ..utils import params
-
+import numpy as np
 
 def find_object_coords(object_mask, coords=None):  # crop_coords = [ymin, ymax, xmin, xmax]
     if coords is None:
@@ -104,6 +98,25 @@ def find_object_radius(mask_original_coords):
                  distance(center, (mask_original_coords[1], mask_original_coords[0])),
                  distance(center, (mask_original_coords[1], mask_original_coords[1])))
     return radius
-   
-    
 
+
+def reference_object_1ISL_recognition(reference_obj_image):
+    ISL1_SIZE = 18  # mm
+    roi = cv2.imread(reference_obj_image)
+    gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+    gray_blur = cv2.GaussianBlur(gray, (15, 15), 0)
+    circles = cv2.HoughCircles(gray_blur, cv2.HOUGH_GRADIENT, 2, roi.shape[0], param1=50, param2=30, minRadius=0, maxRadius=0)
+    circles = np.uint16(np.around(circles))
+    for i in circles[0, :]:
+        cv2.circle(roi, (i[0], i[1]), i[2], (0, 255, 0), 2)
+        cv2.circle(roi, (i[0], i[1]), 2, (0, 0, 255), 3)
+    # font = cv2.FONT_HERSHEY_SIMPLEX
+    # cv2.putText(roi, "coin", (0, 400), font, 0.5, (0, 0, 0), 2, cv2.LINE_AA)
+    # cv2.imshow('Detected coins', roi)
+    # cv2.waitKey()
+
+    return circles[0][0], ISL1_SIZE
+
+
+if __name__ == '__main__':
+    pass

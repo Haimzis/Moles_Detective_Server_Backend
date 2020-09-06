@@ -5,7 +5,7 @@ import cv2
 import sys
 
 
-def eval_asymmetric(mask):
+def asymmetric_eval(mask):
     """
     :param mask: segmentation mask of mole.
     :return: ratio between uncommon pixels and common pixels

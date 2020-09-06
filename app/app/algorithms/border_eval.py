@@ -1,12 +1,10 @@
 import numpy as np
-import numpy.core.multiarray
-from ..utils import utils
+from app.app.utils import utils
 import cv2
-from ..classes.Point import Point
 
 
 def eval_border_irregularities(border_irregularities_number):
-    return min((border_irregularities_number / 100)**1.5, 1.0)
+    return min((border_irregularities_number / 20) ** 1.5, 1.0)
 
 
 def border_eval(mask):
@@ -38,10 +36,14 @@ def border_eval(mask):
 
     full_graph = []
     border_irregularities_number = 0
+    last_value = np.count_nonzero(graph1_img[:, 0])
+    full_graph.append(last_value)
     for graph in [graph1_img, graph2_img, graph3_img, graph4_img]:
         for i in range(0, graph.shape[1]):
-            value = np.count_nonzero(graph[:, i])
-            full_graph.append(value)
+            new_value = np.count_nonzero(graph[:, i])
+            if new_value != last_value:
+                full_graph.append(new_value)
+            last_value = new_value
         full_graph.append(-1)
 
     for i in range(1, len(full_graph) - 1):
@@ -50,25 +52,14 @@ def border_eval(mask):
                 or full_graph[i + 1] == -1:
             continue
         else:
-            if full_graph[i-1] < full_graph[i] < full_graph[i+1]:
+            if full_graph[i - 1] < full_graph[i] > full_graph[i + 1]\
+                    or full_graph[i - 1] > full_graph[i] < full_graph[i + 1]:
                 border_irregularities_number += 1
     if border_irregularities_number == 0:
         print('something wrong')
         return None
     return eval_border_irregularities(border_irregularities_number)
 
-def find_all_coordinates(mask):
-    aligned_mask = utils.align(mask)
-    points = []
-    y1, x1 = find_quarter_coords(aligned_mask, 1, -1)
-    points.append(Point(y1,x1))
-    y2, x2 = find_quarter_coords(aligned_mask, -1, -1)
-    points.append(Point(y2,x2))
-    y3, x3 = find_quarter_coords(aligned_mask, -1, 1)
-    points.append(Point(y3,x3))
-    y4, x4 = find_quarter_coords(aligned_mask, 1, 1)
-    points.append(Point(y4,x4))
-    return points
 
 def find_quarter_coords(aligned_mask, x_dir, y_dir):
     x_dir_steps = x_dir
@@ -88,5 +79,5 @@ def find_quarter_coords(aligned_mask, x_dir, y_dir):
 
 
 if __name__ == '__main__':
-    mask = cv2.imread('/home/haimzis/Downloads/separated_mask0.png', -1)
+    mask = cv2.imread('/home/haimzis/PycharmProjects/DL_training_preprocessing/Output/objects_extraction/segmentation_purpose/annotations/ISIC_0000021_segmentation.png', -1)
     print(border_eval(mask))

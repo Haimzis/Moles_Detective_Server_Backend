@@ -15,9 +15,17 @@ class ClassificationModelInference(AbstractModelInference):
         super().__init__(input_tensor_name, output_tensor_name, input_size, frozen_graph_name, frozen_graph_path,
                          image_preprocess_method)
         self.batch_size = batch_size
-        self.label_names = np.asarray([
-            'background', 'Mole'
-        ])
+        self.label_names = {
+            0: 'AK',
+            1: 'BCC',
+            2: 'BKL',
+            3: 'DF',
+            4: 'MEL',
+            5: 'NV',
+            6: 'SCC',
+            7: 'UNK',
+            8: 'VASC'
+        }
 
     def run_visualization(self, img_input):
         pass
@@ -36,6 +44,7 @@ class ClassificationModelInference(AbstractModelInference):
         logging.info(
             'running {model_name} segmentation model on image {image}'.format(model_name=self.frozen_graph_name,
                                                                               image=img_input))
-        resized_im, seg_map = self.run(original_im)
-        seg_map = seg_map.sum(axis=0) / seg_map.shape[0]
-        return resized_im, seg_map
+        resized_im, classification_output = self.run(original_im)
+        classification_output = classification_output.sum(axis=0) / classification_output.shape[0]
+        label_index = np.argmax(classification_output)
+        return cv2.cvtColor(np.array(resized_im, dtype=np.uint8), cv2.COLOR_RGB2BGR), (self.label_names[label_index], classification_output[label_index])

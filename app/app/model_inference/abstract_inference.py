@@ -28,7 +28,7 @@ class AbstractModelInference(ABC):
         self.input_tensor_name = input_tensor_name
         self.image_preprocess_func = image_preprocess_method
         self.sess = None
-        self.load_graph(frozen_graph_name)
+        self.load_graph(frozen_graph_path)
 
     def load_graph(self, frozen_graph_path):
         """Creates and loads pretrained deeplab model."""

@@ -23,7 +23,10 @@ class SegmentationModelInference(AbstractModelInference):
         resized_im = np.array(resized_im, dtype=np.uint8)
         resized_im = cv2.cvtColor(resized_im, cv2.COLOR_BGR2RGB)
         overlay_image = cv2.addWeighted(resized_im, 0.8, cv2.merge((seg_map * 0, seg_map, seg_map * 0)), 0.2, 0)
-
+        results_container = np.zeros((self.input_size, self.input_size * 3, 3), np.uint8)
+        results_container[0: self.input_size, 0: self.input_size, :] = resized_im
+        results_container[0: self.input_size, self.input_size: self.input_size * 2, :] = overlay_image
+        results_container[0: self.input_size, self.input_size * 2: self.input_size * 3, :] = cv2.merge((seg_map, seg_map, seg_map))
         return resized_im, seg_map, overlay_image.astype(np.uint8)
 
     def quick_inference(self, img_input):
@@ -42,4 +45,4 @@ class SegmentationModelInference(AbstractModelInference):
                                                                               image=img_input))
         resized_im, seg_map = self.run(original_im)
         seg_map = seg_map.astype(np.uint8) * 255
-        return resized_im, seg_map
+        return cv2.cvtColor(np.array(resized_im, dtype=np.uint8), cv2.COLOR_RGB2BGR), seg_map
