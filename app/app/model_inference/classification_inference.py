@@ -2,8 +2,8 @@ import logging
 from io import BytesIO
 import numpy as np
 from PIL import Image
-import tensorflow as tf
-from app.app.model_inference.abstract_inference import AbstractModelInference
+import tensorflow.compat.v1 as tf
+from ..model_inference.abstract_inference import AbstractModelInference
 import cv2
 
 

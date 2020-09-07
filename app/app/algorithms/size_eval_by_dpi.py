@@ -25,11 +25,11 @@ def size_eval(mask, dpi):
     # dpi = dots per inch
     # https://www.howtogeek.com/339665/how-to-find-your-android-devices-info-for-correct-apk-downloads/
     # that how to find the dpi.
-    diameter_mm = (calculate_max_diameter(mask)*1.27) / dpi
+    diameter_mm = (calculate_max_diameter(mask)*1.27) / float(dpi)
     if diameter_mm > 6.0:
-        return 1.0
+        return 1.0, 1.0
     else:
-        return ((diameter_mm / 0.5) + 1) / 10
+        return ((diameter_mm / 0.5) + 1) / 10, 1.0
 
 
 if __name__ == '__main__':

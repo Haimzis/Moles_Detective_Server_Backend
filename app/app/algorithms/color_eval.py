@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from app.app.utils import utils
+from ..utils import utils
 # colors = {
 #     'bright_blue': [[[109, 70, 132], [149, 90, 212]], [[158, 28, 212], [178, 48, 242]],
 #                     [[127, 49, 154], [147, 69, 184]], [[142, 110, 110], [162, 130, 140]]],
@@ -49,14 +49,14 @@ def color_eval(image, mask):
     colors_counter['else'] = 0
     C = 0
     skin_color = skin_color_assumption(image, mask)
-    if is_in_range('white', skin_color):
-        colors_counter.pop('white')
     num_of_pixels = cv2.countNonZero(cv2.cvtColor(lesion_only, cv2.COLOR_BGR2GRAY))
     for i in range(lesion_only.shape[0]):
         for j in range(lesion_only.shape[1]):
             if not lesion_only[i, j].any():
                 continue
             colors_counter[decide_color(lesion_only[i, j, :])] += 1
+    if is_in_range('white', skin_color):
+        colors_counter.pop('white')
     for color, color_appearance in colors_counter.items():
         if color_appearance > num_of_pixels / 100 \
                 and color != 'else':

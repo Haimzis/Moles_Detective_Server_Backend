@@ -1,4 +1,4 @@
-from app.app.utils import utils
+from ..utils import utils
 import numpy as np
 import numpy.core.multiarray
 import cv2
