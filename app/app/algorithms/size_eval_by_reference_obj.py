@@ -23,4 +23,4 @@ def calculate_real_size(full_image, mask):
 
 def size_eval(full_image, mask):
     skin_lesion_real_size = calculate_real_size(full_image, mask)
-    return min((skin_lesion_real_size / 20) ** 1.5, 1.0)
+    return min((skin_lesion_real_size / 20) ** 1.5, 1.0), min((skin_lesion_real_size / 20) ** 1.5, 1.0)

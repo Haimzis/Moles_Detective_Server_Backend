@@ -26,10 +26,11 @@ def size_eval(mask, dpi):
     # https://www.howtogeek.com/339665/how-to-find-your-android-devices-info-for-correct-apk-downloads/
     # that how to find the dpi.
     diameter_mm = (calculate_max_diameter(mask)*1.27) / dpi
-    if diameter_mm > 5.0:
+    if diameter_mm > 6.0:
         return 1.0
     else:
         return ((diameter_mm / 0.5) + 1) / 10
+
 
 if __name__ == '__main__':
     mask = cv2.imread('/home/haimzis/Downloads/separated_mask2_rotate.png' , -1)

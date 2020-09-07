@@ -41,7 +41,9 @@ def asymmetric_eval(mask):
     if HM_vertical > THRESHOLD:
         VAS = 1.0
 
-    return HAS + VAS
+    A = HAS + VAS
+    score = ((HM_horizontal + HM_vertical) / 2) / (THRESHOLD)
+    return score, A
 
 
 def intersection(A_mask, B_mask):

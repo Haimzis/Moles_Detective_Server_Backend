@@ -1,7 +1,7 @@
 import sys
 
 from flask import Flask, jsonify, request
-
+import json
 from app.app.algorithms.asymmetric_eval import asymmetric_eval
 from app.app.algorithms.border_eval import border_eval
 from app.app.algorithms.classification_eval import classification_eval
@@ -52,21 +52,21 @@ def analyze():
     # evaluation
     classification_score = classification_eval(classification_output)
 
-    moles_analyze_results = []
+    moles_analyze_results = {}
     for index, separated_mask in enumerate(segmentation_output):
-        separated_mask = cut_roi_from_mask(separated_mask, find_object_coords(separated_mask))
-        border_score = border_eval(separated_mask)
-        asymmetric_score = asymmetric_eval(separated_mask)
-        size_score = size_eval('/home/haimzis/Desktop/index.jpeg', separated_mask)
-        color_score = color_eval(resized_image, separated_mask)
+        lesion_mask = cut_roi_from_mask(separated_mask, find_object_coords(separated_mask))
+        border_score, B_score = border_eval(lesion_mask)
+        asymmetric_score, A_score = asymmetric_eval(lesion_mask)
+        size_score, D_score = size_eval('/home/haimzis/Desktop/index.jpeg', separated_mask)
+        color_score, C_score = color_eval(resized_image, separated_mask)
         mole_coordinate = find_object_coords(separated_mask)
         mole_center = find_center_coords(mole_coordinate)
         mole_radius = find_object_radius(mole_coordinate)
-        final_score = final_evaluation(border_score, size_score, asymmetric_score, color_score, classification_score)
-        moles_analyze_results.append(
+        final_score = final_evaluation(A_score, B_score, C_score, D_score, classification_score)
+        moles_analyze_results[index] = \
             Mole(asymmetric_score, size_score, border_score, color_score, final_score, classification_score,
-                 mole_coordinate, mole_center, mole_radius))
-    return jsonify({'results': moles_analyze_results.toJSON()})
+                 mole_coordinate, mole_center, mole_radius).toJSON()
+    return jsonify({'results': json.dumps(moles_analyze_results)})
 
 
 if __name__ == "__main__":

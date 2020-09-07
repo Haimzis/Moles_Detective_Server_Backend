@@ -58,7 +58,8 @@ def border_eval(mask):
     if border_irregularities_number == 0:
         print('something wrong')
         return None
-    return eval_border_irregularities(border_irregularities_number)
+    border_score = eval_border_irregularities(border_irregularities_number)
+    return border_score, border_score
 
 
 def find_quarter_coords(aligned_mask, x_dir, y_dir):

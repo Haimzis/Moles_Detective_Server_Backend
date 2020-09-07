@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+
 def find_object_coords(object_mask, coords=None):  # crop_coords = [ymin, ymax, xmin, xmax]
     if coords is None:
         min_y = 0
@@ -30,6 +31,10 @@ def find_object_coords(object_mask, coords=None):  # crop_coords = [ymin, ymax, 
 
 def cut_roi_from_mask(mask, coords):  # crop_coords = [ymin, ymax, xmin, xmax]
     return mask[coords[0]: coords[1], coords[2]: coords[3]]
+
+
+def cut_roi_from_image(image, coords):  # crop_coords = [ymin, ymax, xmin, xmax]
+    return image[coords[0]: coords[1], coords[2]: coords[3], :]
 
 
 def rotate(mask, angle):
