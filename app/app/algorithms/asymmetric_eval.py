@@ -1,8 +1,10 @@
-from ..utils import utils
+from app.app.utils import utils
 import numpy as np
 import numpy.core.multiarray
 import cv2
 import sys
+
+THRESHOLD = 0.165
 
 
 def asymmetric_eval(mask):
@@ -11,10 +13,13 @@ def asymmetric_eval(mask):
     :return: ratio between uncommon pixels and common pixels
              of the 2 parts that divided from the center both horizontal and vertical.
     """
+    VAS = 0
+    HAS = 0
     aligned_mask = utils.align(mask)
-    bias = 0.35  # for nice appearance in the bar (too avoid small scores)
     width_center = aligned_mask.shape[1] // 2
     height_center = aligned_mask.shape[0] // 2
+
+    # find 2 half for vertical and horizontal views.
     if aligned_mask.shape[1] % 2 == 0:
         left_half = aligned_mask[:, 0: width_center]
     else:
@@ -25,19 +30,38 @@ def asymmetric_eval(mask):
     else:
         upper_half = aligned_mask[0: height_center + 1, :]
     bottom_half = aligned_mask[height_center: aligned_mask.shape[0], :]
-    left_half = cv2.flip(left_half, 1)
-    bottom_half = cv2.flip(bottom_half, 0)
-    or_vertical = cv2.bitwise_or(left_half, right_half)
-    and_vertical = cv2.bitwise_and(left_half, right_half)
-    result_vertical = cv2.bitwise_xor(or_vertical, and_vertical)
-    or_horizontal = cv2.bitwise_or(upper_half, bottom_half)
-    and_horizontal = cv2.bitwise_and(upper_half, bottom_half)
-    result_horizontal = cv2.bitwise_xor(or_horizontal, and_horizontal)
-    horizontal_score = np.sum(result_horizontal) / np.sum(or_horizontal)
-    vertical_score = np.sum(result_vertical) / np.sum(or_vertical)
-    result = (horizontal_score + vertical_score) / 2.0 + bias
-    return min(1.0, result)
+    overlapped_left_half = cv2.flip(left_half, 1)
+    overlapped_bottom_half = cv2.flip(bottom_half, 0)
+
+    HM_horizontal = hammoude_distance(right_half, overlapped_left_half)
+    HM_vertical = hammoude_distance(upper_half, overlapped_bottom_half)
+
+    if HM_horizontal > THRESHOLD:
+        HAS = 1.0
+    if HM_vertical > THRESHOLD:
+        VAS = 1.0
+
+    return HAS + VAS
+
+
+def intersection(A_mask, B_mask):
+    return cv2.bitwise_and(A_mask, B_mask)
+
+
+def union(A_mask, B_mask):
+    return cv2.bitwise_or(A_mask, B_mask)
+
+
+def N(mask):
+    return cv2.countNonZero(mask)
+
+
+def hammoude_distance(A_mask, overlapped_B_mask):
+    return (N(union(A_mask, overlapped_B_mask)) - N(intersection(A_mask, overlapped_B_mask))) / \
+           N(union(A_mask, overlapped_B_mask))
+
 
 if __name__ == '__main__':
-    seg_mask = cv2.imread('/home/haimzis/PycharmProjects/DL_training_preprocessing/Output/objects_extraction/annotations/ISIC_0014190_segmentation.png',  -1)
-    print(eval_asymmetric(seg_mask))
+    seg_mask = cv2.imread('/home/haimzis/PycharmProjects/DL_training_preprocessing/Output/objects_extraction/segmentation_purpose/annotations/ISIC_0000479_segmentation.png',  -1)
+    seg_mask = utils.cut_roi_from_mask(seg_mask, utils.find_object_coords(seg_mask))
+    print(asymmetric_eval(seg_mask))

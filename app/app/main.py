@@ -54,6 +54,7 @@ def analyze():
 
     moles_analyze_results = []
     for index, separated_mask in enumerate(segmentation_output):
+        separated_mask = cut_roi_from_mask(separated_mask, find_object_coords(separated_mask))
         border_score = border_eval(separated_mask)
         asymmetric_score = asymmetric_eval(separated_mask)
         size_score = size_eval('/home/haimzis/Desktop/index.jpeg', separated_mask)

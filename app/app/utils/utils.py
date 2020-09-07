@@ -77,7 +77,7 @@ def align(mask):
     for i in range(0, alignment_res.shape[1]):
         for j in range(0, alignment_res.shape[0]):
             if alignment_res[j, i].any():
-                alignment_res[j, i] = 100
+                alignment_res[j, i] = 255
     return alignment_res
 
 
