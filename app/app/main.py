@@ -28,7 +28,6 @@ def hello():
 @app.route("/api/analyze", methods=['POST'])
 def analyze():
     image_path = upload_file(request)
-    image_path = '/home/haimzis/PycharmProjects/yearly_project_flask/app/files/TestInputs/ISIC_0032206.jpg'
     dpi = request.args['dpi']
     log.writeToLogs("Starting to check a new image: " + image_path)
     # separated_masks = prediction.separate_objects_from_mask(mask) TODO: in the future we will separate more than one mask
