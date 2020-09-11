@@ -65,6 +65,7 @@ def analyze():
         moles_analyze_results[index] = \
             Mole(asymmetric_score, size_score, border_score, color_score, final_score, classification_score,
                  mole_coordinate, mole_center, mole_radius).toJSON()
+    print(jsonify({'results': json.dumps(moles_analyze_results)}), sys.stdout.flush())
     return jsonify({'results': json.dumps(moles_analyze_results)})
 
 
