@@ -50,6 +50,7 @@ def upload_mask(mask, filename):
     folder_name=os.path.join(app.config['UPLOAD_FOLDER'], "mask")
     if not os.path.exists(folder_name):
         create_folder(folder_name)
-    expanded_mask = np.expand_dims(mask, axis = -1)
+    mask=mask[0]
+    expanded_mask = cv2.merge([mask,mask,mask])
     cv2.imwrite(os.path.join(folder_name, filename), expanded_mask)
     
