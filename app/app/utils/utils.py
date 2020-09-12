@@ -10,7 +10,7 @@ def is_there_many_recognition(mask):
     first_recognition = find_object_coords(mask)
     ymin, ymax, xmin, xmax = first_recognition
     copy_mask = mask.copy()
-    copy_mask[ymin, ymax + 1: xmin, xmax + 1] = 0
+    copy_mask[ymin: ymax + 1, xmin: xmax + 1] = 0
     second_recognition = find_object_coords(copy_mask)
     if second_recognition:
         return True
