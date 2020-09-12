@@ -1,4 +1,6 @@
 numpy==1.18.1
 opencv-python==3.4.8.29
-tensorflow-gpu==2.2.0
+tensorflow==2.2.0
 easydict==1.9
+pillow
+matplotlib

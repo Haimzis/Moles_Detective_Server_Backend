@@ -1,5 +1,5 @@
 import numpy as np
-from app.app.utils import utils
+from ..utils import utils
 import cv2
 
 

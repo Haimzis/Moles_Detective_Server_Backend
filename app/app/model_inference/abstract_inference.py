@@ -12,8 +12,8 @@ from matplotlib import gridspec
 from matplotlib import pyplot as plt
 import numpy as np
 from PIL import Image
-import tensorflow as tf
-from app.app.utils import params
+import tensorflow.compat.v1 as tf
+from ..utils import params
 import cv2
 import logging
 
