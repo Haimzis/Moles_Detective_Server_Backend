@@ -1,5 +1,6 @@
 import json
 
+
 class Mole:
     def __init__(self, asymmetric_score, size_score, border_score, color_score, final_score, classification_score, mole_coordinate, mole_center, mole_radius):
         self.asymmetric_score = asymmetric_score

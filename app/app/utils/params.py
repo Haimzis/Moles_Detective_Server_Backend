@@ -16,7 +16,7 @@ net_params.segmentation = edict()
 net_params.segmentation.input_tensor_name = 'ImageTensor:0'
 net_params.segmentation.output_tensor_name = 'SemanticPredictions:0'
 net_params.segmentation.frozen_model_name = 'MobileNet_V3'
-net_params.segmentation.frozen_model = '../files/Models/MobileNet_V3_large_ISIC_ver1.pb'
+net_params.segmentation.frozen_model = '../files/Models/MobileNet_V3_large_MolesDetective_ver1.pb'
 net_params.segmentation.batch_size = 1
 
 #### Classification ####
