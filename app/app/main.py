@@ -28,7 +28,6 @@ def hello():
 @app.route("/api/analyze", methods=['POST'])
 def analyze():
     image_path = upload_file(request)
-    image_path = "/app/files/TestInputs/ISIC_0027334.jpg"
     dpi = request.args['dpi']
     log.writeToLogs("Starting to check a new image: " + image_path)
     # separated_masks = prediction.separate_objects_from_mask(mask) TODO: in the future we will separate more than one mask
@@ -60,7 +59,6 @@ def analyze():
         size_score, D_score = size_eval(separated_mask, dpi)
         color_score, C_score = color_eval(resized_image, separated_mask)
         mole_coordinate = find_object_coords(separated_mask)
-        print(mole_coordinate, flush=True)
         mole_center = find_center_coords(mole_coordinate)
         mole_radius = find_object_radius(mole_coordinate)
         final_score = final_evaluation(A_score, B_score, C_score, D_score, classification_score)

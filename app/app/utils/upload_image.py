@@ -41,4 +41,5 @@ def upload_file(request):
             if not os.path.exists(app.config['UPLOAD_FOLDER']):
                 create_folder(app.config['UPLOAD_FOLDER'])
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print((os.path.join(app.config['UPLOAD_FOLDER'],filename)), flush=True)
             return os.path.join(app.config['UPLOAD_FOLDER'], filename)
