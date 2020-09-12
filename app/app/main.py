@@ -13,7 +13,7 @@ from .model_inference.classification_inference import ClassificationModelInferen
 from .model_inference.segmentation_inference import SegmentationModelInference
 from .utils import log, params
 from .utils.upload_image import upload_file
-from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask
+from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask, verify_segmentation_mask
 from .utils.params import net_params
 
 app = Flask(__name__)
@@ -50,6 +50,7 @@ def analyze():
 
     # evaluation
     classification_score = classification_eval(classification_output)
+    assert verify_segmentation_mask(segmentation_output)
 
     moles_analyze_results = {}
     for index, separated_mask in enumerate(segmentation_output):

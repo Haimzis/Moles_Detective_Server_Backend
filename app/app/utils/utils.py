@@ -2,6 +2,13 @@ import cv2
 import numpy as np
 
 
+def verify_segmentation_mask(segmentation_output):
+    for mask in segmentation_output:
+        if not mask.any():
+            return False
+    return True
+
+
 def find_object_coords(object_mask, coords=None):  # crop_coords = [ymin, ymax, xmin, xmax]
     if coords is None:
         min_y = 0
