@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+from app.app.utils import params
+
 
 def normalize_final_score(final_score):
     return min(1.0, final_score / 6.0)
@@ -19,9 +21,13 @@ def is_there_many_recognition(mask):
 
 def verify_segmentation_mask(segmentation_output):
     for mask in segmentation_output:
-        if not mask.any() or is_there_many_recognition(mask):
-            return False
-    return True
+        if not mask.any():
+            raise Exception('mask is empty.')
+        elif is_there_many_recognition(mask):
+            raise Exception('many recognitions was found, this situation is not supported.')
+        elif cv2.countNonZero(mask) < params.MIN_POSSIBLE_PIXELS_FOR_RECOGNITION:
+            raise Exception('recognition contains too few pixels, less than {0}.'
+                            .format(params.MIN_POSSIBLE_PIXELS_FOR_RECOGNITION))
 
 
 def find_object_coords(object_mask, coords=None):  # crop_coords = [ymin, ymax, xmin, xmax]

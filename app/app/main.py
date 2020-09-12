@@ -50,7 +50,7 @@ def analyze():
 
     # evaluation
     classification_score = classification_eval(classification_output)
-    assert verify_segmentation_mask(segmentation_output)
+    verify_segmentation_mask(segmentation_output)
 
     moles_analyze_results = {}
     for index, separated_mask in enumerate(segmentation_output):

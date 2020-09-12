@@ -1,5 +1,6 @@
 from easydict import EasyDict as edict
 
+MIN_POSSIBLE_PIXELS_FOR_RECOGNITION = 25
 ### NETS ###
 INPUT_SIZE = 250
 

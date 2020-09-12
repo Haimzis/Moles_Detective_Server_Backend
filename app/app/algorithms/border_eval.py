@@ -56,8 +56,7 @@ def border_eval(mask):
                     or full_graph[i - 1] > full_graph[i] < full_graph[i + 1]:
                 border_irregularities_number += 1
     if border_irregularities_number == 0:
-        print('something wrong')
-        return None
+        raise Exception('border irregularity < 1, input is not valid')
     border_score = eval_border_irregularities(border_irregularities_number)
     return border_score, border_score
 
