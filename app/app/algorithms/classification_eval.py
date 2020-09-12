@@ -17,7 +17,7 @@ def classification_eval(classification_output):
     if label in ['AK', 'MEL', 'SCC', 'BCC']:
         classification_score += 0.5 * probability
     elif label in ['DF', 'NV']:
-        classification_score += 0.5 * probability * 0.5
+        classification_score += 0.5 * probability
     elif label in ['BKL', 'UNK', 'VASC']:
         classification_score += 0.5 * (1.0 - probability)
 
