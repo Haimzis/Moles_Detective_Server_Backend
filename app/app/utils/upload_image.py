@@ -3,6 +3,7 @@ from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import time
 import cv2
+import numpy as np
 
 UPLOAD_FOLDER = '/files/pictures'
 ALLOWED_EXTENSIONS = {'png'}
@@ -19,7 +20,7 @@ def getExtenstion(filename):
 
 def create_folder(path):
     try:
-        os.makedirs(app.config["UPLOAD_FOLDER"])
+        os.makedirs(path)
     except OSError:
         print ("Creation of the directory %s failed" % path)
     else:
@@ -49,5 +50,6 @@ def upload_mask(mask, filename):
     folder_name=os.path.join(app.config['UPLOAD_FOLDER'], "mask")
     if not os.path.exists(folder_name):
         create_folder(folder_name)
-    cv2.imwrite(os.path.join(folder_name, filename), mask)
+    expanded_mask = np.expand_dims(mask, axis = -1)
+    cv2.imwrite(os.path.join(folder_name, filename), expanded_mask)
     

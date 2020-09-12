@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from app.app.utils import params
+from ..utils import params
 
 
 def normalize_final_score(final_score):
