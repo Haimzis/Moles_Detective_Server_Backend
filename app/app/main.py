@@ -13,7 +13,8 @@ from .model_inference.classification_inference import ClassificationModelInferen
 from .model_inference.segmentation_inference import SegmentationModelInference
 from .utils import log, params
 from .utils.upload_image import upload_file
-from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask, verify_segmentation_mask
+from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
+    verify_segmentation_mask, normalize_final_score
 from .utils.params import net_params
 
 app = Flask(__name__)
@@ -63,8 +64,8 @@ def analyze():
         mole_radius = find_object_radius(mole_coordinate)
         final_score = final_evaluation(A_score, B_score, C_score, D_score, classification_score)
         moles_analyze_results[index] = \
-            Mole(asymmetric_score, size_score, border_score, color_score, final_score, classification_score,
-                  mole_center, mole_radius).toJSON()
+            Mole(asymmetric_score, size_score, border_score, color_score, normalize_final_score(final_score),
+                 classification_score, mole_center, mole_radius).toJSON()
     return json.dumps(moles_analyze_results)
 
 

@@ -2,14 +2,32 @@ import cv2
 import numpy as np
 
 
+def normalize_final_score(final_score):
+    return min(1.0, final_score / 6.0)
+
+
+def is_there_many_recognition(mask):
+    first_recognition = find_object_coords(mask)
+    ymin, ymax, xmin, xmax = first_recognition
+    copy_mask = mask.copy()
+    copy_mask[ymin, ymax + 1: xmin, xmax + 1] = 0
+    second_recognition = find_object_coords(copy_mask)
+    if second_recognition:
+        return True
+    return False
+
+
 def verify_segmentation_mask(segmentation_output):
     for mask in segmentation_output:
-        if not mask.any():
+        if not mask.any() or is_there_many_recognition(mask):
             return False
     return True
 
 
 def find_object_coords(object_mask, coords=None):  # crop_coords = [ymin, ymax, xmin, xmax]
+    if not object_mask.any():
+        return []
+
     if coords is None:
         min_y = 0
         max_y = object_mask.shape[0] - 1
