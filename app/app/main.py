@@ -59,14 +59,14 @@ def analyze():
         size_score, D_score = size_eval(separated_mask, dpi)
         color_score, C_score = color_eval(resized_image, separated_mask)
         mole_coordinate = find_object_coords(separated_mask)
+        print(mole_coordinate, flush=True)
         mole_center = find_center_coords(mole_coordinate)
         mole_radius = find_object_radius(mole_coordinate)
         final_score = final_evaluation(A_score, B_score, C_score, D_score, classification_score)
         moles_analyze_results[index] = \
             Mole(asymmetric_score, size_score, border_score, color_score, final_score, classification_score,
-                 mole_coordinate, mole_center, mole_radius).toJSON()
-    print(jsonify({'results': json.dumps(moles_analyze_results)}), sys.stdout.flush())
-    return jsonify({'results': json.dumps(moles_analyze_results)})
+                  mole_center, mole_radius).toJSON()
+    return json.dumps(moles_analyze_results)
 
 
 if __name__ == "__main__":

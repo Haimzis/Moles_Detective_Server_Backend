@@ -38,6 +38,7 @@ def upload_file(request):
             return
         if file and allowed_file(file.filename):
             filename = secure_filename(str(round(time.time() * 1000)) + "_" + file.filename)
-            create_folder(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            if not os.path.exists(app.config['UPLOAD_FOLDER']):
+                create_folder(app.config['UPLOAD_FOLDER'])
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return os.path.join(app.config['UPLOAD_FOLDER'], filename)
