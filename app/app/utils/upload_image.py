@@ -2,8 +2,9 @@ import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 import time
+import cv2
 
-UPLOAD_FOLDER = '/files/masks'
+UPLOAD_FOLDER = '/files/pictures'
 ALLOWED_EXTENSIONS = {'png'}
 
 app = Flask(__name__)
@@ -27,10 +28,10 @@ def create_folder(path):
 def upload_file(request):
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'mask' not in request.files:
+        if 'mole_picture' not in request.files:
             flash('No file part')
             return 
-        file = request.files['mask']
+        file = request.files['mole_picture']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
@@ -42,4 +43,11 @@ def upload_file(request):
                 create_folder(app.config['UPLOAD_FOLDER'])
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print((os.path.join(app.config['UPLOAD_FOLDER'],filename)), flush=True)
-            return os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            return filename, os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+def upload_mask(mask, filename):
+    folder_name=os.path.join(app.config['UPLOAD_FOLDER'], "mask")
+    if not os.path.exists(folder_name):
+        create_folder(folder_name)
+    cv2.imwrite(os.path.join(folder_name, filename), mask)
+    

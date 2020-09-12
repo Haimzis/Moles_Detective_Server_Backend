@@ -12,7 +12,7 @@ from .classes.Mole import Mole
 from .model_inference.classification_inference import ClassificationModelInference
 from .model_inference.segmentation_inference import SegmentationModelInference
 from .utils import log, params
-from .utils.upload_image import upload_file
+from .utils.upload_image import upload_file, upload_mask
 from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
     verify_segmentation_mask, normalize_final_score
 from .utils.params import net_params
@@ -28,9 +28,9 @@ def hello():
 
 @app.route("/api/analyze", methods=['POST'])
 def analyze():
-    image_path = upload_file(request)
+    filename, image_path = upload_file(request)
     dpi = request.args['dpi']
-    log.writeToLogs("Starting to check a new image: " + image_path)
+    log.writeToLogs("Starting to check a new image: " + filename)
     # separated_masks = prediction.separate_objects_from_mask(mask) TODO: in the future we will separate more than one mask
     # classification #
     classification_inference_instance = ClassificationModelInference(net_params.classification.input_tensor_name,
@@ -47,6 +47,7 @@ def analyze():
                                                                  net_params.segmentation.frozen_model_name,
                                                                  net_params.segmentation.frozen_model, None)
     resized_image, segmentation_output = segmentation_inference_instance.quick_inference(image_path)
+    upload_mask(segmentation_output, filename)
 
     # evaluation
     classification_score = classification_eval(classification_output)
