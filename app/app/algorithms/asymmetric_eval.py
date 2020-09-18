@@ -41,7 +41,7 @@ def asymmetric_eval(aligned_mask):
         VAS = 1.0
 
     A = HAS + VAS
-    score = min(((HM_horizontal + HM_vertical) / 2) / (THRESHOLD), 1.0)
+    score = min((((HM_horizontal + HM_vertical) / 2) / THRESHOLD)**2, 1.0)
     return score, A
 
 
@@ -63,7 +63,8 @@ def hammoude_distance(A_mask, overlapped_B_mask):
 
 
 if __name__ == '__main__':
-    seg_mask = cv2.imread('/home/haimzis/1600431611138_0_mask.png',  -1)
-    seg_mask = utils.cut_roi_from_mask(seg_mask, utils.find_object_coords(seg_mask))
+    seg_mask = cv2.imread('/home/haimzis/1600441789085_0.png',  -1)
     seg_mask = cv2.cvtColor(seg_mask, cv2.COLOR_BGR2GRAY)
+    seg_mask = utils.align_by_centroid(seg_mask)
+    seg_mask = utils.cut_roi_from_mask(seg_mask, utils.find_object_coords(seg_mask))
     print(asymmetric_eval(seg_mask))
