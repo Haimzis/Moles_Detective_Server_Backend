@@ -17,23 +17,18 @@ from .utils.utils import find_object_coords, find_center_coords, find_object_rad
     verify_segmentation_mask, normalize_final_score
 from .utils.params import net_params
 from werkzeug.exceptions import HTTPException
+from easydict import EasyDict as edict
 app = Flask(__name__)
 
 
 @app.errorhandler(Exception)
 def handle_exception(e):
-    response = e.get_response()
+    response = edict()
     # replace the body with JSON
     response.data = json.dumps({
-        "code": e.code,
-        "name": e.name,
-        "description": e.description,
+        "description": str(e),
     })
     response.content_type = "application/json"
-
-    # pass through HTTP errors
-    if isinstance(e, HTTPException):
-        return e
 
     # now you're handling non-HTTP exceptions only
     return response, 500
