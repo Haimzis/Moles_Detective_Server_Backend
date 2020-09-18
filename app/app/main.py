@@ -72,7 +72,7 @@ def analyze():
         color_score, C_score = color_eval(resized_image, separated_mask)
         mole_coordinate = find_object_coords(separated_mask)
         mole_center = find_center_coords(separated_mask)
-        mole_radius = find_object_radius(mole_coordinate)
+        mole_radius = find_object_radius(mole_center, mole_coordinate)
         final_score = final_evaluation(A_score, B_score, C_score, D_score, classification_score)
         moles_analyze_results[index] = \
             Mole(asymmetric_score, size_score, border_score, color_score, normalize_final_score(final_score),
