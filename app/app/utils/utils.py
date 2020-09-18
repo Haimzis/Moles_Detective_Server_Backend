@@ -117,7 +117,7 @@ def align_by_diameter(mask):
 
 
 def align_by_centroid(mask):
-    Xc, Yc = find_center_coords(mask)
+    Yc, Xc = find_center_coords(mask)
     # calculate theta angle for centroid alignment
     m11 = 0
     m20 = 0
@@ -143,11 +143,10 @@ def find_center_coords(mask_original):
     # calculate x,y coordinate of center
     Xc = int(M["m10"] / M["m00"])
     Yc = int(M["m01"] / M["m00"])
-    return Xc, Yc
+    return Yc, Xc
 
 
 def find_object_radius(center, mask_original_coords):
-    center = center[1], center[0]
     radius = max(distance(center, (mask_original_coords[0], mask_original_coords[2])),
                  distance(center, (mask_original_coords[0], mask_original_coords[3])),
                  distance(center, (mask_original_coords[1], mask_original_coords[2])),
