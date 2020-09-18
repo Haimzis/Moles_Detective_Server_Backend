@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from ..utils import utils
+from app.app.utils import utils
 # colors = {
 #     'bright_blue': [[[109, 70, 132], [149, 90, 212]], [[158, 28, 212], [178, 48, 242]],
 #                     [[127, 49, 154], [147, 69, 184]], [[142, 110, 110], [162, 130, 140]]],
@@ -93,3 +93,9 @@ def is_in_range(color, pixel):
             and bmax >= b >= bmin:
         return True
     return False
+
+
+if __name__ == '__main__':
+    image = cv2.imread('/home/haimzis/1600431611138_0.png', -1)
+    mask = cv2.cvtColor(cv2.imread('/home/haimzis/1600431611138_0_mask.png', -1), cv2.COLOR_BGR2GRAY)
+    color_eval(image, mask)

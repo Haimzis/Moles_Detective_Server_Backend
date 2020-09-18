@@ -8,7 +8,7 @@ from ..utils import utils
 # formula for calculating the lesion size:
 # lesion real size = lesion_pixels_size / PPM
 def calculate_pixels_size(mask):
-    aligned_mask = utils.align(mask)
+    aligned_mask = utils.align_by_diameter(mask)
     mask_after_cut = utils.cut_roi_from_mask(aligned_mask, utils.find_object_coords(aligned_mask))
     return mask_after_cut.shape[:2]
 

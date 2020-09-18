@@ -10,7 +10,7 @@ def distance(pixel1, pixel2):
 
 
 def calculate_max_diameter(mask):
-    aligned_mask = utils.align(mask)
+    aligned_mask = utils.align_by_diameter(mask)
     max_diameter = 0
     for i in range(0, aligned_mask.shape[0]):
         for j in range(0, aligned_mask.shape[0]):

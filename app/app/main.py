@@ -1,5 +1,4 @@
 import sys
-
 from flask import Flask, jsonify, request
 import json
 from .algorithms.asymmetric_eval import asymmetric_eval
@@ -14,7 +13,7 @@ from .model_inference.segmentation_inference import SegmentationModelInference
 from .utils import log, params
 from .utils.upload_image import upload_file, upload_mask
 from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
-    verify_segmentation_mask, normalize_final_score
+    verify_segmentation_mask, normalize_final_score, align_by_centroid
 from .utils.params import net_params
 from werkzeug.exceptions import HTTPException
 from easydict import EasyDict as edict
@@ -39,7 +38,9 @@ def analyze():
     filename, image_path = upload_file(request)
     dpi = request.args['dpi']
     log.writeToLogs("Starting to check a new image: " + filename)
+
     # separated_masks = prediction.separate_objects_from_mask(mask) TODO: in the future we will separate more than one mask
+
     # classification #
     classification_inference_instance = ClassificationModelInference(net_params.classification.input_tensor_name,
                                                                      net_params.classification.output_tensor_name,
@@ -63,13 +64,14 @@ def analyze():
 
     moles_analyze_results = {}
     for index, separated_mask in enumerate(segmentation_output):
-        lesion_mask = cut_roi_from_mask(separated_mask, find_object_coords(separated_mask))
-        border_score, B_score = border_eval(lesion_mask)
-        asymmetric_score, A_score = asymmetric_eval(lesion_mask)
+        aligned_mask = align_by_centroid(separated_mask)
+        lesion_mask_aligned = cut_roi_from_mask(aligned_mask, find_object_coords(aligned_mask))
+        border_score, B_score = border_eval(lesion_mask_aligned)
+        asymmetric_score, A_score = asymmetric_eval(lesion_mask_aligned)
         size_score, D_score = size_eval(separated_mask, dpi)
         color_score, C_score = color_eval(resized_image, separated_mask)
         mole_coordinate = find_object_coords(separated_mask)
-        mole_center = find_center_coords(mole_coordinate)
+        mole_center = find_center_coords(separated_mask)
         mole_radius = find_object_radius(mole_coordinate)
         final_score = final_evaluation(A_score, B_score, C_score, D_score, classification_score)
         moles_analyze_results[index] = \

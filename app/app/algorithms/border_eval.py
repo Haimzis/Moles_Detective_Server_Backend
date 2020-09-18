@@ -7,8 +7,7 @@ def eval_border_irregularities(border_irregularities_number):
     return min((border_irregularities_number / 20) ** 1.5, 1.0)
 
 
-def border_eval(mask):
-    aligned_mask = utils.align(mask)
+def border_eval(aligned_mask):
 
     # find 4 edge of the lesion from the center
     y1, x1 = find_quarter_coords(aligned_mask, 1, -1)
@@ -64,8 +63,7 @@ def border_eval(mask):
 def find_quarter_coords(aligned_mask, x_dir, y_dir):
     x_dir_steps = x_dir
     y_dir_steps = y_dir
-    width_center = aligned_mask.shape[1] // 2
-    height_center = aligned_mask.shape[0] // 2
+    width_center, height_center = aligned_mask.shape[1] // 2, aligned_mask.shape[0] // 2
     if not aligned_mask[height_center, width_center].any():
         print('something went wrong')
         return None
@@ -81,5 +79,5 @@ def find_quarter_coords(aligned_mask, x_dir, y_dir):
 
 
 if __name__ == '__main__':
-    mask = cv2.imread('/home/haimzis/PycharmProjects/DL_training_preprocessing/Output/objects_extraction/segmentation_purpose/annotations/ISIC_0000021_segmentation.png', -1)
+    mask = cv2.imread('/home/haimzis/1600431611138_0.png', -1)
     print(border_eval(mask))

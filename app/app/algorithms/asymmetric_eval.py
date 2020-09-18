@@ -7,7 +7,7 @@ import sys
 THRESHOLD = 0.165
 
 
-def asymmetric_eval(mask):
+def asymmetric_eval(aligned_mask):
     """
     :param mask: segmentation mask of mole.
     :return: ratio between uncommon pixels and common pixels
@@ -15,9 +15,8 @@ def asymmetric_eval(mask):
     """
     VAS = 0
     HAS = 0
-    aligned_mask = utils.align(mask)
-    width_center = aligned_mask.shape[1] // 2
-    height_center = aligned_mask.shape[0] // 2
+
+    width_center, height_center = aligned_mask.shape[1] // 2, aligned_mask.shape[0] // 2
 
     # find 2 half for vertical and horizontal views.
     if aligned_mask.shape[1] % 2 == 0:
@@ -64,6 +63,7 @@ def hammoude_distance(A_mask, overlapped_B_mask):
 
 
 if __name__ == '__main__':
-    seg_mask = cv2.imread('/home/haimzis/PycharmProjects/DL_training_preprocessing/Output/objects_extraction/segmentation_purpose/annotations/ISIC_0000479_segmentation.png',  -1)
+    seg_mask = cv2.imread('/home/haimzis/1600431611138_0_mask.png',  -1)
     seg_mask = utils.cut_roi_from_mask(seg_mask, utils.find_object_coords(seg_mask))
+    seg_mask = cv2.cvtColor(seg_mask, cv2.COLOR_BGR2GRAY)
     print(asymmetric_eval(seg_mask))

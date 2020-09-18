@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-
 from ..utils import params
 
 
@@ -97,7 +96,7 @@ def rotate(mask, angle):
     return rotated_mat
 
 
-def align(mask):
+def align_by_diameter(mask):
     """
     :param mask: segmentation mask of mole.
     :return: aligned segmentation mask of the mole.
@@ -117,18 +116,47 @@ def align(mask):
     return alignment_res
 
 
-def find_center_coords(mask_original_coords):  # crop_coords = [ymin, ymax, xmin, xmax]
-    ymin, ymax, xmin, xmax = mask_original_coords
-    center_coords = ((ymax + ymin) // 2, (xmax + xmin) // 2)
-    return center_coords
+def align_by_centroid(mask):
+    Xc, Yc = find_center_coords(mask)
+    # calculate theta angle for centroid alignment
+    m11 = 0
+    m20 = 0
+    m02 = 0
+    for Xi in range(mask.shape[1]):
+        for Yi in range(mask.shape[0]):
+            if not mask[Yi, Xi].any():
+                continue
+            m11 += (Xi - Xc)**1 * (Yi - Yc)**1
+            m20 += (Xi - Xc)**2 * (Yi - Yc)**0
+            m02 += (Xi - Xc)**0 * (Yi - Yc)**2
+
+    theta = 0.5*np.arctan(2*m11 / (m20 - m02))
+    res = rotate(mask, np.degrees(theta))
+    return res
 
 
-def find_object_radius(mask_original_coords):
-    center = find_center_coords(mask_original_coords)
-    radius = max(distance(center, (mask_original_coords[0], mask_original_coords[2])),
-                 distance(center, (mask_original_coords[0], mask_original_coords[3])),
-                 distance(center, (mask_original_coords[1], mask_original_coords[2])),
-                 distance(center, (mask_original_coords[1], mask_original_coords[3])))
+def find_center_coords(mask_original):
+    # convert the grayscale image to binary image
+    ret, thresh = cv2.threshold(mask_original, 127, 255, 0)
+    # calculate moments of binary image
+    M = cv2.moments(thresh)
+    # calculate x,y coordinate of center
+    Xc = int(M["m10"] / M["m00"])
+    Yc = int(M["m01"] / M["m00"])
+    return Xc, Yc
+
+
+def find_object_radius(mask_original):
+    # center = find_center_coords(mask_original_coords)
+    # radius = max(distance(center, (mask_original_coords[0], mask_original_coords[2])),
+    #              distance(center, (mask_original_coords[0], mask_original_coords[3])),
+    #              distance(center, (mask_original_coords[1], mask_original_coords[2])),
+    #              distance(center, (mask_original_coords[1], mask_original_coords[3])))
+    # return radius
+    Xc, Yc = find_center_coords(mask_original)
+    aligned_mask = align_by_centroid(mask_original)
+    radius = max(Xc + ((aligned_mask.shape[1] // 2) - Xc),
+                 Yc + ((aligned_mask.shape[0] // 2) - Yc))
     return radius
 
 
@@ -155,4 +183,10 @@ def reference_object_1ISL_recognition(reference_obj_image):
 
 
 if __name__ == '__main__':
-    pass
+    seg_mask = cv2.imread('/home/haimzis/1600431611138_0_mask.png',  -1)
+    seg_mask = cut_roi_from_mask(seg_mask, find_object_coords(seg_mask))
+    seg_mask = cv2.cvtColor(seg_mask, cv2.COLOR_BGR2GRAY)
+    print(find_center_coords(seg_mask))
+    print(find_object_radius(seg_mask))
+    ci = cv2.circle(seg_mask, find_center_coords(seg_mask), find_object_radius(seg_mask), (255, 0, 0), 1)
+    print("stam")
