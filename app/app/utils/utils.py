@@ -4,7 +4,7 @@ from ..utils import params
 
 
 def normalize_final_score(final_score):
-    return min(1.0, final_score / 6.0)
+    return min(1.0, (final_score / 6.0)**3)
 
 
 def is_there_many_recognition(mask):
