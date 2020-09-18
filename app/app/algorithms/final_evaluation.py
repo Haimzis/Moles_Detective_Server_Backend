@@ -14,6 +14,6 @@ def final_evaluation(A_score, B_score, C_score, D_score, classification_score):
     elif 4.75 <= TDS < 5.45:
         final_score += (0.3 * (5.45 - 4.75)) ** 2 * TDS
     else:  # TDS >= 5.45
-        final_score = min((final_score + 0.2 * (8.0 - 5.45)) ** 3, 1.0)
+        final_score += (final_score + 0.2 * (8.0 - 5.45)) ** 3
 
     return final_score
