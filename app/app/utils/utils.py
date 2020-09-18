@@ -146,12 +146,17 @@ def find_center_coords(mask_original):
     return Xc, Yc
 
 
-def find_object_radius(center, mask_original_coords):
-    center = center[1], center[0]
-    radius = max(distance(center, (mask_original_coords[0], mask_original_coords[2])),
-                 distance(center, (mask_original_coords[0], mask_original_coords[3])),
-                 distance(center, (mask_original_coords[1], mask_original_coords[2])),
-                 distance(center, (mask_original_coords[1], mask_original_coords[3])))
+def find_object_radius(mask_original):
+    # center = find_center_coords(mask_original_coords)
+    # radius = max(distance(center, (mask_original_coords[0], mask_original_coords[2])),
+    #              distance(center, (mask_original_coords[0], mask_original_coords[3])),
+    #              distance(center, (mask_original_coords[1], mask_original_coords[2])),
+    #              distance(center, (mask_original_coords[1], mask_original_coords[3])))
+    # return radius
+    Xc, Yc = find_center_coords(mask_original)
+    aligned_mask = align_by_centroid(mask_original)
+    radius = max(Xc + ((aligned_mask.shape[1] // 2) - Xc),
+                 Yc + ((aligned_mask.shape[0] // 2) - Yc))
     return radius
 
 
