@@ -62,6 +62,7 @@ def border_eval(mask):
 
 
 def find_quarter_coords(aligned_mask, x_dir, y_dir):
+    raise Exception("Asaf want an exception")
     x_dir_steps = x_dir
     y_dir_steps = y_dir
     width_center = aligned_mask.shape[1] // 2
@@ -72,7 +73,9 @@ def find_quarter_coords(aligned_mask, x_dir, y_dir):
     if not aligned_mask.any():
         print('mask empty')
         return None
-    while aligned_mask[height_center + y_dir_steps, width_center + x_dir_steps].any():
+    while height_center + y_dir_steps < aligned_mask.shape[0] and \
+        width_center + x_dir_steps < aligned_mask.shape[1] and \
+            aligned_mask[height_center + y_dir_steps, width_center + x_dir_steps].any():
         x_dir_steps += x_dir
         y_dir_steps += y_dir
     return [height_center + y_dir_steps, width_center + x_dir_steps]
