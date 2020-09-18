@@ -2,13 +2,13 @@ def classification_eval(classification_output):
     label, probability = classification_output
     classification_score = 0.0
     label_scores = {
-        'AK': 0.6,
+        'AK': 0.5,
         'BCC': 0.4,
         'BKL': 0,
         'DF': 0.2,
-        'MEL': 0.6,
+        'MEL': 0.5,
         'NV': 0.2,
-        'SCC': 0.6,
+        'SCC': 0.5,
         'UNK': 0,
         'VASC': 0
     }
