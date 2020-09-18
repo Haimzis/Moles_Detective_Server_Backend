@@ -16,14 +16,27 @@ from .utils.upload_image import upload_file, upload_mask
 from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
     verify_segmentation_mask, normalize_final_score
 from .utils.params import net_params
-
+from werkzeug.exceptions import HTTPException
 app = Flask(__name__)
 
 
-@app.route("/")
-def hello():
-    print("Hello World", file=sys.stderr)
-    return "Hello"
+@app.errorhandler(Exception)
+def handle_exception(e):
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "code": e.code,
+        "name": e.name,
+        "description": e.description,
+    })
+    response.content_type = "application/json"
+
+    # pass through HTTP errors
+    if isinstance(e, HTTPException):
+        return e
+
+    # now you're handling non-HTTP exceptions only
+    return response, 500
 
 
 @app.route("/api/analyze", methods=['POST'])
