@@ -42,7 +42,7 @@ def asymmetric_eval(mask):
         VAS = 1.0
 
     A = HAS + VAS
-    score = ((HM_horizontal + HM_vertical) / 2) / (THRESHOLD)
+    score = min(((HM_horizontal + HM_vertical) / 2) / (THRESHOLD), 1.0)
     return score, A
 
 
