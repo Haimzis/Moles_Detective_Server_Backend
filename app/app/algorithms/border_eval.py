@@ -18,7 +18,7 @@ def border_eval(aligned_mask):
     # partition to 4 graphs images
     graph1_img = aligned_mask[y1:y4, min(x1, x4): aligned_mask.shape[1] - 1]  # right
     graph2_img = aligned_mask[0: max(y1, y2), x2: x1]  # up
-    graph3_img = aligned_mask[y2:y3, 0: min(x2, x3)]  # left
+    graph3_img = aligned_mask[y2:y3, 0: max(x2, x3)]  # left
     graph4_img = aligned_mask[min(y3, y4): aligned_mask.shape[0] - 1, x3: x4]  # bottom
 
     # rotation img to look as graph
