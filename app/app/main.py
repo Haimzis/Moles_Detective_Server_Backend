@@ -28,6 +28,7 @@ def handle_exception(e):
     # replace the body with JSON
     response.data = json.dumps({
         "description": str(e),
+        "traceback": str(traceback.format_exc()),
     })
     response.content_type = "application/json"
 
