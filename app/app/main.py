@@ -1,6 +1,7 @@
 import sys
-from flask import Flask, jsonify, request
+import traceback 
 import json
+from flask import Flask, jsonify, request
 from .algorithms.asymmetric_eval import asymmetric_eval
 from .algorithms.border_eval import border_eval
 from .algorithms.classification_eval import classification_eval
@@ -15,17 +16,19 @@ from .utils.upload_image import upload_file, upload_mask
 from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
     verify_segmentation_mask, normalize_final_score, align_by_centroid
 from .utils.params import net_params
-from werkzeug.exceptions import HTTPException
 from easydict import EasyDict as edict
+
 app = Flask(__name__)
 
 
 @app.errorhandler(Exception)
 def handle_exception(e):
+    print(traceback.format_exc())
     response = edict()
     # replace the body with JSON
     response.data = json.dumps({
         "description": str(e),
+        "traceback": str(traceback.format_exc()),
     })
     response.content_type = "application/json"
 
@@ -81,6 +84,5 @@ def analyze():
 
 
 if __name__ == "__main__":
-    # Only for debugging while developing
-    app.run(host="0.0.0.0", debug=True, port=80)
+    app.run(host="0.0.0.0", port=80)
     analyze()
