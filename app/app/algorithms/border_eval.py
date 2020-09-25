@@ -4,7 +4,7 @@ import cv2
 
 
 def eval_border_irregularities(border_irregularities_number):
-    return min((border_irregularities_number / 20) ** 1.5, 1.0)
+    return min((border_irregularities_number / 35) ** 1.2, 1.0)
 
 
 def border_eval(aligned_mask):
@@ -51,8 +51,8 @@ def border_eval(aligned_mask):
                 or full_graph[i + 1] == -1:
             continue
         else:
-            if full_graph[i - 1] < full_graph[i] > full_graph[i + 1]\
-                    or full_graph[i - 1] > full_graph[i] < full_graph[i + 1]:
+            if full_graph[i - 1] < full_graph[i] > full_graph[i + 1]: #\
+                    # or full_graph[i - 1] > full_graph[i] < full_graph[i + 1]:
                 border_irregularities_number += 1
     if border_irregularities_number == 0:
         raise Exception('border irregularity < 1, input is not valid')
