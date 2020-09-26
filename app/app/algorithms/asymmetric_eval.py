@@ -1,4 +1,4 @@
-from app.app.utils import utils
+from ..utils import utils
 import cv2
 
 THRESHOLD = 0.165

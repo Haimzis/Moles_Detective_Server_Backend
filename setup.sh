@@ -16,4 +16,4 @@ printf "\n"
 printf "Built a flask image named flask_image from the Dockerfile\n"
 printf "=========================================================================================\n"
 printf "Starting a container from the built image (port 80 and mount point to /files/pictures)\n\n"
-docker run --name flask_container -d -v /files/pictures:/files/pictures -p 80:80 flask_image
+docker run --name flask_container -v /files/pictures:/files/pictures -p 80:80 flask_image
