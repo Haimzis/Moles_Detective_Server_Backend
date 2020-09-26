@@ -184,3 +184,8 @@ if __name__ == '__main__':
     print(find_object_radius(seg_mask))
     ci = cv2.circle(seg_mask, find_center_coords(seg_mask), find_object_radius(seg_mask), (255, 0, 0), 1)
     print("stam")
+
+
+def save_for_debug(name, img):
+    cv2.imwrite('/home/haimzis/PycharmProjects/yearly_project_flask/app/Debugging_Res/{0}.png'.format(name),
+                img)
