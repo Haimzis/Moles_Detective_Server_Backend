@@ -6,26 +6,26 @@ THRESHOLD = 0.165
 
 def asymmetric_eval(aligned_mask):
     """
-    :param mask: segmentation mask of mole.
-    :return: ratio between uncommon pixels and common pixels
-             of the 2 parts that divided from the center both horizontal and vertical.
+    :param mask: aligned segmentation mask of lesion.
+    :return: float asymmetric evaluation by activation of hammoude_distance,
+            after consideration of vertical and horizontal axis.
     """
-    VAS = 0
-    HAS = 0
+    VAS = 0  # vertical asymmetric score
+    HAS = 0  # horizontal asymmetric score
 
-    width_center, height_center = aligned_mask.shape[1] // 2, aligned_mask.shape[0] // 2
+    x_axis_center, y_axis_center = aligned_mask.shape[1] // 2, aligned_mask.shape[0] // 2
 
     # find 2 half for vertical and horizontal views.
     if aligned_mask.shape[1] % 2 == 0:
-        left_half = aligned_mask[:, 0: width_center]
+        left_half = aligned_mask[:, 0: x_axis_center]
     else:
-        left_half = aligned_mask[:, 0: width_center + 1]
-    right_half = aligned_mask[:, width_center: aligned_mask.shape[1]]
+        left_half = aligned_mask[:, 0: x_axis_center + 1]
+    right_half = aligned_mask[:, x_axis_center: aligned_mask.shape[1]]
     if aligned_mask.shape[0] % 2 == 0:
-        upper_half = aligned_mask[0: height_center, :]
+        upper_half = aligned_mask[0: y_axis_center, :]
     else:
-        upper_half = aligned_mask[0: height_center + 1, :]
-    bottom_half = aligned_mask[height_center: aligned_mask.shape[0], :]
+        upper_half = aligned_mask[0: y_axis_center + 1, :]
+    bottom_half = aligned_mask[y_axis_center: aligned_mask.shape[0], :]
 
     overlapped_left_half = cv2.flip(left_half, 1)
     overlapped_bottom_half = cv2.flip(bottom_half, 0)
@@ -52,10 +52,17 @@ def union(A_mask, B_mask):
 
 
 def N(mask):
+    """
+    :param mask: segmentation mask
+    :return: amount of activated pixels.
+    """
     return cv2.countNonZero(mask)
 
 
 def hammoude_distance(A_mask, overlapped_B_mask):
+    """
+    known algorithm for calculation of asymmetric ratio
+    """
     return (N(union(A_mask, overlapped_B_mask)) - N(intersection(A_mask, overlapped_B_mask))) / \
            N(union(A_mask, overlapped_B_mask))
 

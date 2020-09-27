@@ -8,7 +8,11 @@ def eval_border_irregularities(border_irregularities_number):
 
 
 def border_eval(aligned_mask):
-
+    """
+    :param aligned_mask
+    :return: float border evaluation, by number of number of
+            extremum appearance on the lesion board.
+    """
     # find 4 edge of the lesion from the center
     y1, x1 = find_quarter_coords(aligned_mask, 1, -1)
     y2, x2 = find_quarter_coords(aligned_mask, -1, -1)
@@ -37,6 +41,7 @@ def border_eval(aligned_mask):
     border_irregularities_number = 0
     last_value = np.count_nonzero(graph1_img[:, 0])
     full_graph.append(last_value)
+    # reduction from image pixels column to a numeric one.
     for graph in [graph1_img, graph2_img, graph3_img, graph4_img]:
         for i in range(0, graph.shape[1]):
             new_value = np.count_nonzero(graph[:, i])
@@ -45,6 +50,7 @@ def border_eval(aligned_mask):
             last_value = new_value
         full_graph.append(-1)
 
+    # counting of extremum appearance
     for i in range(1, len(full_graph) - 1):
         if full_graph[i] == -1 \
                 or full_graph[i - 1] == -1 \
@@ -61,6 +67,12 @@ def border_eval(aligned_mask):
 
 
 def find_quarter_coords(aligned_mask, x_dir, y_dir):
+    """
+    :param aligned_mask
+    :param x_dir: direction of x axis addition
+    :param y_dir: direction of y axis addition
+    :return: the first unactivated pixel, after moving desired quarter direction.
+    """
     x_dir_steps = x_dir
     y_dir_steps = y_dir
     width_center, height_center = aligned_mask.shape[1] // 2, aligned_mask.shape[0] // 2
