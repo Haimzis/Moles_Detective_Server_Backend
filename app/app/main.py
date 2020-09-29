@@ -2,20 +2,20 @@ import sys
 import traceback 
 import json
 from flask import Flask, jsonify, request
-from ..algorithms.asymmetric_eval import asymmetric_eval
-from ..algorithms.border_eval import border_eval
-from ..algorithms.classification_eval import classification_eval
-from ..algorithms.color_eval import color_eval
-from ..algorithms.final_evaluation import final_evaluation
-from ..algorithms.size_eval_by_dpi import size_eval
-from ..classes.Mole import Mole
-from ..model_inference.classification_inference import ClassificationModelInference
-from ..model_inference.segmentation_inference import SegmentationModelInference
-from ..utils import log, params
-from ..utils.upload_image import upload_file, upload_mask
-from ..utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
+from .algorithms.asymmetric_eval import asymmetric_eval
+from .algorithms.border_eval import border_eval
+from .algorithms.classification_eval import classification_eval
+from .algorithms.color_eval import color_eval
+from .algorithms.final_evaluation import final_evaluation
+from .algorithms.size_eval_by_dpi import size_eval
+from .classes.Mole import Mole
+from .model_inference.classification_inference import ClassificationModelInference
+from .model_inference.segmentation_inference import SegmentationModelInference
+from .utils import log, params
+from .utils.upload_image import upload_file, upload_mask
+from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
     verify_segmentation_mask, normalize_final_score, align_by_centroid
-from ..utils.params import net_params
+from .utils.params import net_params
 from easydict import EasyDict as edict
 
 app = Flask(__name__)

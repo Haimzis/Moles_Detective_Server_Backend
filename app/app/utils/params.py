@@ -13,7 +13,7 @@ net_params.segmentation.input_size = 250
 net_params.segmentation.input_tensor_name = 'ImageTensor:0'
 net_params.segmentation.output_tensor_name = 'SemanticPredictions:0'
 net_params.segmentation.frozen_model_name = 'MobileNet_V3'
-net_params.segmentation.frozen_model = 'app/files/Models/MobileNet_V3_large_MolesDetective_ver1.pb'
+net_params.segmentation.frozen_model = '/app/files/Models/MobileNet_V3_large_MolesDetective_ver1.pb'
 net_params.segmentation.batch_size = 1
 
 #### Classification ####
@@ -21,12 +21,12 @@ net_params.segmentation.batch_size = 1
 # net_params.classification.input_tensor_name = 'fifo_queue_Dequeue:0'
 # net_params.classification.output_tensor_name = 'InceptionV3/Predictions/Reshape_1:0'
 # net_params.classification.frozen_model_name = 'Inception_V3'
-# net_params.classification.frozen_model = 'app/files/Models/InceptionV3_ISIC_ver1.pb'
+# net_params.classification.frozen_model = '/app/files/Models/InceptionV3_ISIC_ver1.pb'
 # net_params.classification.batch_size = 12
 
 net_params.classification.input_size = 224
 net_params.classification.input_tensor_name = 'fifo_queue_Dequeue:0'
 net_params.classification.output_tensor_name = 'resnet_v2_50/predictions/Reshape_1:0'
 net_params.classification.frozen_model_name = 'ResNet_V2_50'
-net_params.classification.frozen_model = 'app/files/Models/ResNet_V2_50_ISIC_Ver1.pb'
+net_params.classification.frozen_model = '/app/files/Models/ResNet_V2_50_ISIC_Ver1.pb'
 net_params.classification.batch_size = 12
