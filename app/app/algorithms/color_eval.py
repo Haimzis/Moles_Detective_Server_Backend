@@ -45,7 +45,7 @@ def color_eval(image, mask):
         if color_appearance > num_of_pixels / 100 \
                 and color != 'else':
             C += 1
-    color_score = (C / 6)**2
+    color_score = C / 5
     return color_score, C
 
 

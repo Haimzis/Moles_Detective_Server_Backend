@@ -4,7 +4,7 @@ import cv2
 
 
 def eval_border_irregularities(border_irregularities_number):
-    return min((border_irregularities_number / 35) ** 1.2, 1.0)
+    return min((border_irregularities_number / 30) ** 1.2, 1.0)
 
 
 def border_eval(aligned_mask):
