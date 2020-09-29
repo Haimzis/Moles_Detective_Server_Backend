@@ -2,52 +2,53 @@ import sys
 import traceback 
 import json
 from flask import Flask, jsonify, request
-from .algorithms.asymmetric_eval import asymmetric_eval
-from .algorithms.border_eval import border_eval
-from .algorithms.classification_eval import classification_eval
-from .algorithms.color_eval import color_eval
-from .algorithms.final_evaluation import final_evaluation
-from .algorithms.size_eval_by_dpi import size_eval
-from .classes.Mole import Mole
-from .model_inference.classification_inference import ClassificationModelInference
-from .model_inference.segmentation_inference import SegmentationModelInference
-from .utils import log, params
-from .utils.upload_image import upload_file, upload_mask
-from .utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
+from app.app.algorithms.asymmetric_eval import asymmetric_eval
+from app.app.algorithms.border_eval import border_eval
+from app.app.algorithms.classification_eval import classification_eval
+from app.app.algorithms.color_eval import color_eval
+from app.app.algorithms.final_evaluation import final_evaluation
+from app.app.algorithms.size_eval_by_dpi import size_eval
+from app.app.classes.Mole import Mole
+from app.app.model_inference.classification_inference import ClassificationModelInference
+from app.app.model_inference.segmentation_inference import SegmentationModelInference
+from app.app.utils import log, params
+from app.app.utils.upload_image import upload_file, upload_mask
+from app.app.utils.utils import find_object_coords, find_center_coords, find_object_radius, cut_roi_from_mask,\
     verify_segmentation_mask, normalize_final_score, align_by_centroid
-from .utils.params import net_params
+from app.app.utils.params import net_params
 from easydict import EasyDict as edict
 
-app = Flask(__name__)
+# app = Flask(__name__)
+#
+#
+# @app.errorhandler(Exception)
+# def handle_exception(e):
+#     print(traceback.format_exc())
+#     response = edict()
+#     # replace the body with JSON
+#     response.data = json.dumps({
+#         "description": str(e),
+#         "traceback": str(traceback.format_exc()),
+#     })
+#     response.content_type = "application/json"
+#
+#     # now you're handling non-HTTP exceptions only
+#     return response, 500
 
 
-@app.errorhandler(Exception)
-def handle_exception(e):
-    print(traceback.format_exc())
-    response = edict()
-    # replace the body with JSON
-    response.data = json.dumps({
-        "description": str(e),
-        "traceback": str(traceback.format_exc()),
-    })
-    response.content_type = "application/json"
-
-    # now you're handling non-HTTP exceptions only
-    return response, 500
-
-
-@app.route("/api/analyze", methods=['POST'])
+# @app.route("/api/analyze", methods=['POST'])
 def analyze():
-    filename, image_path = upload_file(request)
-    dpi = request.args['dpi']
-    log.writeToLogs("Starting to check a new image: " + filename)
-
+    # filename, image_path = upload_file(request)
+    # dpi = request.args['dpi']
+    # log.writeToLogs("Starting to check a new image: " + filename)
+    dpi = 440
+    image_path = '/home/haimzis/PycharmProjects/yearly_project_flask/app/files/TestInputs/ISIC_0000001.jpg'
     # separated_masks = prediction.separate_objects_from_mask(mask) TODO: in the future we will separate more than one mask
 
     # classification #
     classification_inference_instance = ClassificationModelInference(net_params.classification.input_tensor_name,
                                                                      net_params.classification.output_tensor_name,
-                                                                     params.INPUT_SIZE,
+                                                                     net_params.classification.input_size,
                                                                      net_params.classification.frozen_model_name,
                                                                      net_params.classification.frozen_model, None,
                                                                      net_params.classification.batch_size)
@@ -55,11 +56,11 @@ def analyze():
     # segmentation #
     segmentation_inference_instance = SegmentationModelInference(net_params.segmentation.input_tensor_name,
                                                                  net_params.segmentation.output_tensor_name,
-                                                                 params.INPUT_SIZE,
+                                                                 net_params.segmentation.input_size,
                                                                  net_params.segmentation.frozen_model_name,
                                                                  net_params.segmentation.frozen_model, None)
     resized_image, segmentation_output = segmentation_inference_instance.quick_inference(image_path)
-    upload_mask(segmentation_output, filename)
+    # upload_mask(segmentation_output, filename)
 
     # evaluation
     classification_score = classification_eval(classification_output)
@@ -84,4 +85,5 @@ def analyze():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+    # app.run(host="0.0.0.0", port=80)
+    analyze()

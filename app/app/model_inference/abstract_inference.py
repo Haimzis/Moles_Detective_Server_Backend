@@ -48,7 +48,7 @@ class AbstractModelInference(ABC):
         self.sess = tf.Session(graph=graph)
         logging.info('model loaded successfully!')
 
-    def run(self, image):
+    def run(self, image, batch_size=1, dtype=np.uint8):
         """
             Runs inference on a single image.
         Args:
@@ -64,9 +64,13 @@ class AbstractModelInference(ABC):
         if self.image_preprocess_func:
             net_image = self.image_preprocess_func(resized_image)
             net_image = np.expand_dims(net_image, axis=-1)
+
+        net_image = np.array(net_image)
+        net_image = np.array([net_image]*batch_size, dtype=dtype)
+
         output = self.sess.run(
             self.output_tensor_name,
-            feed_dict={self.input_tensor_name: [np.asarray(net_image)]})
+            feed_dict={self.input_tensor_name: net_image})
         return resized_image, output
 
     @abstractmethod

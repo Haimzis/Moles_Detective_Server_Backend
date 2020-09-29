@@ -44,7 +44,7 @@ class ClassificationModelInference(AbstractModelInference):
         logging.info(
             'running {model_name} segmentation model on image {image}'.format(model_name=self.frozen_graph_name,
                                                                               image=img_input))
-        resized_im, classification_output = self.run(original_im)
+        resized_im, classification_output = self.run(original_im, self.batch_size, np.float32)
         classification_output = classification_output.sum(axis=0) / classification_output.shape[0]
         label_index = np.argmax(classification_output)
         return cv2.cvtColor(np.array(resized_im, dtype=np.uint8), cv2.COLOR_RGB2BGR), (self.label_names[label_index], classification_output[label_index])
