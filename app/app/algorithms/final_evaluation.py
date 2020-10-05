@@ -6,7 +6,7 @@ def final_evaluation(A_score, B_score, C_score, D_score, classification_score):
     # D for Diameter (size in mm)
     # + our consideration of image classification
     final_score = 0.0
-    TDS = A_score * 1.3 + B_score * 0.2 + C_score * 0.5 + D_score * 0.2 \
+    TDS = A_score * 1.4 + B_score * 0.1 + C_score * 0.6 + D_score * 0.1 \
           + classification_score * 0.3
 
     if TDS < 4.75:
