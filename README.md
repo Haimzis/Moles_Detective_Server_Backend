@@ -1,8 +1,8 @@
-## Skin Detective Back-End
+# Skin Detective Back-End
 
  **The backend application is stateless. it receives an image, analyse it and returns a response in a form of JSON**
 
-### ***Deployment process:***
+## ***Deployment process:***
 
 1. run the setup.sh script file `path/to/file/setup.sh`
 
@@ -12,13 +12,14 @@
 * docker installed
 * default port is 80 - can be changed according to requirements
 
-### ***Usage***
+## ***Usage***
 
 Description: Analyse mole </br>
 Usage: POST /api/analyze?dpi=${dpi} </br>
 Consumes: image/png </br>
 Produces: application/json </br>
 Sample Output: </br>
+
 ```json
 [{
    "asymmetric_score":1.0,
@@ -35,7 +36,7 @@ Sample Output: </br>
 }]
 ```
 
-### ***Artificial Neural Networks***
+## ***Artificial Neural Networks***
 
 ### **Segmentation network**
 
@@ -44,25 +45,21 @@ Sample Output: </br>
 
 <img src="app\files\segmentation_output_examples\output_1.jpg">
 
-### ***Activities***
+### **Classification network**
 
-| `Home Activity` | `Camera Activity` |
-| :---: | :---: |
-| <img src="app/pictures/Home_Activity.jpeg" width="300"> | <img src="app/pictures/Camera_Activity.jpeg" width="300"> |
-| `Analyse Results Activity` | `Results Activity` |
-|  <img src="app/pictures/Analyse_Results_Activity.jpeg" width="300"> | <img src="app/pictures/Results_Activity.jpeg" width="300"> |
+**Input**: RGB frame(250x250) </br>
+**Output**: label string - the name of the class that the skin lesion belongs to. we have 9 different categorizations for skin lesions.
 
-### ***Netron preview***
+#### **Helpful Algorithms**
 
-The model is `quantization aware trained` that was converted by `TOCO converter` to `tflite` format
-<img src="app/pictures/Netron_Preview.png">
+1. detect the coordinates of skin lesion(s) in a picture.
+1. aligning a picture.
+1. removal of margins from a picture.
+1. picture rotation.
 
-### ***UML class diagrams***
+## **Algorithms**
 
-Activity | SVG file | PNG picture |
-| :---: | :---: | :---: |
-| Home Activity |[home_activity.svg](app/UML/home_activity.svg) | [home_activity.png](app/UML/home_activity.png) |
-| Camera Activity |[camera_activity.svg](app/UML/camera_activity.svg) | [camera_activity.png](app/UML/camera_activity.png) |
-| Analyse Results Activity |[analyse_results_activity.svg](app/UML/analyse_results_activity.svg) | [analyse_results_activity.png](app/UML/analyse_results_activity.png) |
-| Results Activity |[results_activity.svg](app/UML/results_activity.svg) | [results_activity.png](app/UML/results_activity.png) |
-| Database |[database.svg](app/UML/database.svg) | [database.png](app/UML/database.png) |
+1. Asymmetry - calculate if a skin lesion is asymmetric or not.
+1. Border deviation - calculate the border deviation of a skin lesion.
+1. Size - calculate the size of a skin lesion (see [Measuring size of objects in an image with OpenCV](https://www.pyimagesearch.com/2016/03/28/measuring-size-of-objects-in-an-image-with-opencv))
+1. Color - analyze the color of a skin lesion.
