@@ -57,9 +57,10 @@ Sample Output: </br>
 1. removal of margins from a picture.
 1. picture rotation.
 
-## **Algorithms**
+## **Main Algorithms**
 
 1. Asymmetry - calculate if a skin lesion is asymmetric or not.
 1. Border deviation - calculate the border deviation of a skin lesion.
 1. Size - calculate the size of a skin lesion (see [Measuring size of objects in an image with OpenCV](https://www.pyimagesearch.com/2016/03/28/measuring-size-of-objects-in-an-image-with-opencv))
 1. Color - analyze the color of a skin lesion.
+1. Classification - categorical classification of a lesion with DL model. 
