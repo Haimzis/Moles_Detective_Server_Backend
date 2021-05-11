@@ -64,3 +64,17 @@ Sample Output: </br>
 1. Size - calculate the size of a skin lesion (see [Measuring size of objects in an image with OpenCV](https://www.pyimagesearch.com/2016/03/28/measuring-size-of-objects-in-an-image-with-opencv))
 1. Color - analyze the color of a skin lesion.
 1. Classification - categorical classification of a lesion with DL model. 
+
+### **UML - Sequence Diagram**
+![](app/pictures/uml_seq.png)
+
+### **Algorithms rating examples**
+####**([0,1] distribution) for a given mask input**
+Asymmetric (0 - Symmetric, 1 - Asymmetric)
+![](app/pictures/asymmetric.png)
+
+Border (0 - smooth border, 1 - many irregularities points)
+![](app/pictures/border.png)
+
+Color (0 - no suspicious shades, 1 - many suspicious shades)
+![](app/pictures/color.png)
