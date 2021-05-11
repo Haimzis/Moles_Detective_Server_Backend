@@ -43,7 +43,7 @@ Sample Output: </br>
 **Input**: RGB frame(250x250) </br>
 **Output**: GrayScale mask(250x250) - every pixel that relates to the skin lesion will be on (value = 255), otherwise off (value = 0)
 
-<img src="app\files\segmentation_output_examples\output_1.jpg">
+![](app/files/segmentation_output_examples/output_1.jpg)
 
 ### **Classification network**
 
@@ -69,7 +69,8 @@ Sample Output: </br>
 ![](app/pictures/uml_seq.png)
 
 ### **Algorithms rating examples**
-####**([0,1] distribution) for a given mask input**
+#### **([0,1] distribution) for a given mask input**
+
 Asymmetric (0 - Symmetric, 1 - Asymmetric)
 ![](app/pictures/asymmetric.png)
 
